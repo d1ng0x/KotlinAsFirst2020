@@ -51,13 +51,12 @@ fun daysInMonth(month: Int, year: Int): Int {
     val x2 = year % 400
     val x3 = year % 100
     if (month == 2) {
-        if (x2 == 0)
-            return 29
-        else if (x3 == 0)
-            return 28
-        else if (x1 == 0)
-            return 29
-        return 28
+        return when {
+            x2 == 0 -> 29
+            x3 == 0 -> 28
+            x1 == 0 -> 29
+            else -> 28
+        }
     } else if (month == 4 || month == 6 || month == 9 || month == 11)
         return 30
     return 31
