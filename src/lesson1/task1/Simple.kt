@@ -80,9 +80,9 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int {
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
 fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
-    val x1 = sagenes * 3 * 48 * 4.445
-    val x2 = arshins * 48 * 4.445
-    val x3 = (x1 + x2 + vershoks * 4.445) * 4.445
+    val x1 = sagenes * 48 * 4.445
+    val x2 = arshins * 16 * 4.445
+    val x3 = x1 + x2 + vershoks * 4.445
     return x3 / 100
 }
 
