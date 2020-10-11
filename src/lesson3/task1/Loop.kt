@@ -72,7 +72,8 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int = TODO ()
+
 
 /**
  * Простая (2 балла)
@@ -87,14 +88,30 @@ fun fib(n: Int): Int = TODO()
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    var i = 1
+    while (i <= n) {
+        i += 1
+        if (n % i == 0)
+            break
+    }
+    return i
+}
 
 /**
  * Простая (2 балла)
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    var i = n - 1
+    while (i < n) {
+        i -= 1
+        if (n % i == 0)
+            break
+    }
+    return i
+}
 
 /**
  * Простая (2 балла)
@@ -121,7 +138,6 @@ fun collatzSteps(x: Int): Int = TODO()
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int = TODO()
-
 /**
  * Средняя (3 балла)
  *
@@ -147,7 +163,18 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var x = 0
+    var number = 0
+    var n2 = n
+    while (n2 > 0) {
+        x = n2 % 10
+        n2 /= 10
+        number *= 10
+        number += x
+    }
+    return number
+}
 
 /**
  * Средняя (3 балла)

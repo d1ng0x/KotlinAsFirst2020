@@ -65,11 +65,8 @@ fun main(args: Array<String>) {
  * Пользователь задает время в часах, минутах и секундах, например, 8:20:35.
  * Рассчитать время в секундах, прошедшее с начала суток (30035 в данном случае).
  */
-fun seconds(hours: Int, minutes: Int, seconds: Int): Int {
-    val x1 = hours * 60 * 60
-    val x2 = minutes * 60
-    return x1 + x2 + seconds
-}
+fun seconds(hours: Int, minutes: Int, seconds: Int) =
+    hours * 60 * 60 + minutes * 60 + seconds
 
 
 /**
@@ -140,4 +137,4 @@ fun accountInThreeYears(initial: Int, percent: Int): Double = TODO()
  * Пользователь задает целое трехзначное число (например, 478).
  * Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
  */
-fun numberRevert(number: Int) {}
+fun numberRevert(number: Int): Int = TODO()
