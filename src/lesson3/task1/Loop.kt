@@ -91,7 +91,7 @@ fun fib(n: Int): Int = TODO()
 fun minDivisor(n: Int): Int {
     var i = 1
     while (i <= n) {
-        i += 1
+        i++
         if (n % i == 0)
             break
     }
@@ -106,7 +106,7 @@ fun minDivisor(n: Int): Int {
 fun maxDivisor(n: Int): Int {
     var i = n
     while (i <= n) {
-        i -= 1
+        i--
         if (n % i == 0)
             break
     }

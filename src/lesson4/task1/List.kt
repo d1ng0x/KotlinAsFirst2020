@@ -127,7 +127,12 @@ fun abs(v: List<Double>): Double = TODO()
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double {
+    if (list.isEmpty())
+        return 0.0
+    return list.sum() / list.size
+}
+
 
 /**
  * Средняя (3 балла)
@@ -137,7 +142,15 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    val x = list.sum() / list.size
+    if (list.isNotEmpty()) {
+        for ((index, element) in list.withIndex()) {
+            list[index] = element - x
+        }
+    }
+    return list
+}
 
 /**
  * Средняя (3 балла)
@@ -168,7 +181,15 @@ fun polynom(p: List<Int>, x: Int): Int = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    if (list.isNotEmpty()) {
+        for (i in 1 until list.size) {
+            val element = list[i]
+            list[i] = element + list[i - 1]
+        }
+    }
+    return list
+}
 
 /**
  * Средняя (3 балла)
@@ -186,7 +207,21 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String {
+    var x = 2
+    val result = mutableListOf<Int>()
+    var number = n
+    while (x * x <= number) {
+        if (number % x == 0) {
+            result.add(x)
+            number /= x
+        } else x++
+    }
+    if (number > 1) {
+        result.add(number)
+    }
+    return result.joinToString(separator = "*")
+}
 
 /**
  * Средняя (3 балла)
