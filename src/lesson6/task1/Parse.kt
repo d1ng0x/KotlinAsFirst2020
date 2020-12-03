@@ -149,7 +149,18 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val parts = Regex(""" """).split(str)
+    if (parts.size == 1)
+        return -1
+    var count = 0
+    for (i in 1 until parts.size) {
+        if (parts[i - 1].toLowerCase() == parts[i].toLowerCase())
+            return count
+        count += parts[i - 1].length + 1
+    }
+    return -1
+}
 
 /**
  * Сложная (6 баллов)
@@ -176,6 +187,29 @@ fun mostExpensive(description: String): String = TODO()
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int = TODO()
+// if (!roman.matches(Regex("""[IVXLCDM]""")))
+//     return -1
+// for (char in roman) {
+//     Regex("""I""").replace("roman", "1 ")
+//     Regex("""V""").replace(roman, "5 ")
+//     Regex("""X""").replace(roman, "10 ")
+//     Regex("""L""").replace(roman, "50 ")
+//     Regex("""C""").replace(roman, "100 ")
+//     Regex("""D""").replace(roman, "500 ")
+//     Regex("""M""").replace(roman, "1000 ")
+//  }
+// val parts = roman.split(' ')
+// var res = parts.first().toInt()
+//for (i in 1 until parts.size) {
+//    val y = parts[i - 1].toInt()
+//    val r = parts[i].toInt()
+//    if (y >= r)
+//        res += r
+//    else res -= r
+// }
+// return res
+//}
+
 
 /**
  * Очень сложная (7 баллов)
