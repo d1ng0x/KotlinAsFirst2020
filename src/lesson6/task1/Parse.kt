@@ -138,7 +138,23 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    if (!"$expression + ".matches(Regex("""(\d+ [+-] )+"""))) {
+        throw IllegalArgumentException(expression)
+    }
+    val parts = Regex(""" """).split(expression)
+    var result = parts[0].toInt()
+    var i = 1
+    while (i < parts.size) {
+        result += parts[i + 1].toInt() *
+                when (parts[i].trim()) {
+                    "+" -> 1
+                    else -> -1
+                }
+        i += 2
+    }
+    return result
+}
 
 /**
  * Сложная (6 баллов)
@@ -187,28 +203,6 @@ fun mostExpensive(description: String): String = TODO()
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int = TODO()
-// if (!roman.matches(Regex("""[IVXLCDM]""")))
-//     return -1
-// for (char in roman) {
-//     Regex("""I""").replace("roman", "1 ")
-//     Regex("""V""").replace(roman, "5 ")
-//     Regex("""X""").replace(roman, "10 ")
-//     Regex("""L""").replace(roman, "50 ")
-//     Regex("""C""").replace(roman, "100 ")
-//     Regex("""D""").replace(roman, "500 ")
-//     Regex("""M""").replace(roman, "1000 ")
-//  }
-// val parts = roman.split(' ')
-// var res = parts.first().toInt()
-//for (i in 1 until parts.size) {
-//    val y = parts[i - 1].toInt()
-//    val r = parts[i].toInt()
-//    if (y >= r)
-//        res += r
-//    else res -= r
-// }
-// return res
-//}
 
 
 /**

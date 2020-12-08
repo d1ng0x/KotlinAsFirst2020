@@ -144,8 +144,38 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    var max = 0
+    for (line in File(inputName).readLines()) {
+        val l = line.replace(" +".toRegex(), " ")
+        if (l.trim().length > max)
+            max = l.trim().length
+    }
+    val outputStream = File(outputName).bufferedWriter()
+    for (line in File(inputName).readLines()) {
+        val l = line.replace(" +".toRegex(), " ")
+        val parts = Regex("""\s""").split(l.trim()).toMutableList()
+        if (parts.size == 1) {
+            outputStream.write(l.trim())
+            outputStream.newLine()
+        } else if (!line.isBlank()) {
+            var temp = max - l.trim().length
+            var i = 0
+            while (temp > 0) {
+                parts[i] += " "
+                if (i < parts.size - 2)
+                    i++
+                else
+                    i = 0
+                temp--
+            }
+            outputStream.write(parts.joinToString(" "))
+            outputStream.newLine()
+        } else
+            outputStream.newLine()
+    }
+    outputStream.close()
 }
+
 
 /**
  * Средняя (14 баллов)
@@ -282,8 +312,71 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val tagSign = listOf("*", "**", "~")
+    val stack = mutableListOf(" ")
+    val usingTags = mutableListOf(false, false, false)
+    val outputStream = File(outputName).bufferedWriter()
+    val emptyList = mutableListOf<Boolean>()
+    outputStream.write("<html><body><p>")
+    for (line in File(inputName).readLines())
+        if (line.isNotEmpty())
+            emptyList.add(false)
+        else
+            emptyList.add(true)
+    emptyList.add(true)
+    for ((counter, line) in File(inputName).readLines().withIndex()) {
+        if (counter < emptyList.indexOf(false))
+            outputStream.write("")
+        else if (emptyList[counter] && !emptyList[counter + 1])
+            outputStream.write("</p><p>")
+        else if (emptyList[counter] && emptyList[counter + 1])
+            outputStream.write("")
+        else {
+            var i = 0
+            while (i < line.length) {
+                if (i < line.length - 1 && line[i] == line[i + 1] && line[i].toString() == tagSign[0]) {
+                    outputStream.write("<")
+                    if (stack.last() == tagSign[1]) {
+                        outputStream.write("/")
+                        stack.remove(stack.last())
+                        usingTags[1] = false
+                    } else {
+                        stack.add(tagSign[1])
+                        usingTags[1] = true
+                    }
+                    outputStream.write("b>")
+                    i++
+                } else if (line[i].toString() == tagSign[0]) {
+                    outputStream.write("<")
+                    if (stack.last() == tagSign[0]) {
+                        outputStream.write("/")
+                        stack.remove(stack.last())
+                        usingTags[0] = false
+                    } else {
+                        stack.add(tagSign[0])
+                        usingTags[0] = true
+                    }
+                    outputStream.write("i>")
+                } else if (i < line.length - 1 && line[i] == line[i + 1] && line[i].toString() == tagSign[2]) {
+                    outputStream.write("<")
+                    if (!usingTags[2])
+                        usingTags[2] = true
+                    else {
+                        outputStream.write("/")
+                        usingTags[2] = false
+                    }
+                    outputStream.write("s>")
+                    i++
+                } else
+                    outputStream.write(line[i].toString())
+                i++
+            }
+        }
+    }
+    outputStream.write("</p></body></html>")
+    outputStream.close()
 }
+
 
 /**
  * Сложная (23 балла)

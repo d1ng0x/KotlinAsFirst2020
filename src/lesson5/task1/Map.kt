@@ -108,8 +108,11 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = b + a == b
-
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    if (b + a == b)
+        return true
+    return false
+}
 
 /**
  * Простая (2 балла)
@@ -142,10 +145,10 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Map<Strin
  */
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     val res = mutableListOf<String>()
-    for (element in a) {
+    for (i in a.indices) {
+        val element = a[i]
         if (element in b)
-            if (element !in res)
-                res += element
+            res += element
     }
     return res
 }
@@ -180,7 +183,21 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val res = mutableMapOf<String, Double>()
+    for ((key) in stockPrices) {
+        var i = 0
+        val x = key
+        var sum = 0.0
+        for ((key, value) in stockPrices)
+            if (key == x) {
+                sum += value
+                i++
+            }
+        res[key] = sum / i
+    }
+    return res
+}
 
 
 /**
@@ -225,13 +242,11 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    val res = mutableMapOf<String, Int>()
-    for (element in list) {
-        if (!res.containsKey(element))
-            res[element] = 1
-        else res[element] = res.getValue(element) + 1
-    }
-    return res.filterValues { it > 1 }
+    val result = mutableMapOf<String, Int>()
+    for (i in list.indices)
+        if (!result.containsKey(list[i])) result[list[i]] = 1
+        else result[list[i]] = result.getValue(list[i]) + 1
+    return result.filterValues { it > 1 }
 }
 
 /**
@@ -302,9 +317,8 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    for (i in list.indices)
-        if ((number - list[i] in list) && (i != list.indexOf(number - list[i])))
-            return Pair(minOf(i, list.indexOf(number - list[i])), maxOf(i, list.indexOf(number - list[i])))
+    for (i in list.indices) if ((number - list[i] in list) && (i != list.indexOf(number - list[i])))
+        return Pair(minOf(i, list.indexOf(number - list[i])), maxOf(i, list.indexOf(number - list[i])))
     return Pair(-1, -1)
 }
 
