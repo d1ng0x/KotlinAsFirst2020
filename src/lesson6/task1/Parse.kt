@@ -142,18 +142,14 @@ fun plusMinus(expression: String): Int {
     if (!"$expression + ".matches(Regex("""(\d+ [+-] )+"""))) {
         throw IllegalArgumentException(expression)
     }
-    val parts = Regex(""" """).split(expression)
-    var result = parts[0].toInt()
-    var i = 1
-    while (i < parts.size) {
-        result += parts[i + 1].toInt() *
-                when (parts[i].trim()) {
-                    "+" -> 1
-                    else -> -1
-                }
-        i += 2
+    val parts = expression.split(" ")
+    var res = parts[0].toInt()
+    for (i in 2 until parts.size step (2)) {
+        if (parts[i - 1] == "+") res += parts[i].toInt()
+        else res -= parts[i].toInt()
     }
-    return result
+
+    return res
 }
 
 /**
@@ -166,12 +162,12 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    val parts = Regex(""" """).split(str)
+    val parts = Regex(" ").split(str)
     if (parts.size == 1)
         return -1
     var count = 0
     for (i in 1 until parts.size) {
-        if (parts[i - 1].toLowerCase() == parts[i].toLowerCase())
+        if (parts[i - 1].equals(parts[i], ignoreCase = true))
             return count
         count += parts[i - 1].length + 1
     }

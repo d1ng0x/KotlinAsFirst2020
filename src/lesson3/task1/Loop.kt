@@ -195,12 +195,11 @@ fun isPalindrome(n: Int): Boolean = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var m = n / 10
-    while (m > 0) {
-        if (m % 10 != n % 10) return true
-        else m /= 10
+    var m = n
+    while (m > 0 && m % 10 == n % 10) {
+        m /= 10
     }
-    return false
+    return m != 0
 }
 
 /**

@@ -312,70 +312,69 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val tagSign = listOf("*", "**", "~")
-    val stack = mutableListOf(" ")
-    val usingTags = mutableListOf(false, false, false)
-    val outputStream = File(outputName).bufferedWriter()
-    val emptyList = mutableListOf<Boolean>()
-    outputStream.write("<html><body><p>")
-    for (line in File(inputName).readLines())
-        if (line.isNotEmpty())
-            emptyList.add(false)
-        else
-            emptyList.add(true)
-    emptyList.add(true)
-    for ((counter, line) in File(inputName).readLines().withIndex()) {
-        if (counter < emptyList.indexOf(false))
-            outputStream.write("")
-        else if (emptyList[counter] && !emptyList[counter + 1])
-            outputStream.write("</p><p>")
-        else if (emptyList[counter] && emptyList[counter + 1])
-            outputStream.write("")
-        else {
-            var i = 0
-            while (i < line.length) {
-                if (i < line.length - 1 && line[i] == line[i + 1] && line[i].toString() == tagSign[0]) {
-                    outputStream.write("<")
-                    if (stack.last() == tagSign[1]) {
-                        outputStream.write("/")
-                        stack.remove(stack.last())
-                        usingTags[1] = false
-                    } else {
-                        stack.add(tagSign[1])
-                        usingTags[1] = true
-                    }
-                    outputStream.write("b>")
-                    i++
-                } else if (line[i].toString() == tagSign[0]) {
-                    outputStream.write("<")
-                    if (stack.last() == tagSign[0]) {
-                        outputStream.write("/")
-                        stack.remove(stack.last())
-                        usingTags[0] = false
-                    } else {
-                        stack.add(tagSign[0])
-                        usingTags[0] = true
-                    }
-                    outputStream.write("i>")
-                } else if (i < line.length - 1 && line[i] == line[i + 1] && line[i].toString() == tagSign[2]) {
-                    outputStream.write("<")
-                    if (!usingTags[2])
-                        usingTags[2] = true
-                    else {
-                        outputStream.write("/")
-                        usingTags[2] = false
-                    }
-                    outputStream.write("s>")
-                    i++
-                } else
-                    outputStream.write(line[i].toString())
-                i++
+    val list = mutableMapOf(
+        "**" to false,
+        "*" to false,
+        "~~" to false
+    )
+    val resultList = mutableListOf<String>()
+    val writer = File(outputName).bufferedWriter()
+    resultList.add("<html>")
+    resultList.add("<body>")
+    resultList.add("<p>")
+    var pTrigger = true
+    for ((lineNumber, line) in File(inputName).readLines().withIndex()) {
+        if (line.isEmpty() && lineNumber != File(inputName).readLines().lastIndex && resultList.last() != "<p>") {
+            if (File(inputName).readLines()[lineNumber + 1].isEmpty()) continue
+            if (pTrigger) {
+                resultList.add("</p>")
+                pTrigger = false
+            }
+            if (!pTrigger) {
+                resultList.add("<p>")
+                pTrigger = true
             }
         }
+        var i = 0
+        while (i <= line.lastIndex) {
+            var symbol = line[i].toString()
+            if (i != line.lastIndex) {
+                if (list.contains(symbol + line[i + 1].toString())) {
+                    symbol = line[i].toString() + line[i + 1].toString()
+                    i += 2
+                    val status = list.getValue(symbol)
+                    resultList.add(toTag(symbol, status))
+                    list[symbol] = !status
+                    continue
+                }
+            }
+            if (list.contains(symbol)) {
+                symbol = line[i].toString()
+                i++
+            } else {
+                resultList.add(symbol)
+                i++
+                continue
+            }
+            val status = list.getValue(symbol)
+            resultList.add(toTag(symbol, status))
+            list[symbol] = !status
+        }
     }
-    outputStream.write("</p></body></html>")
-    outputStream.close()
+    resultList.add("</p></body></html>")
+    writer.write(resultList.joinToString(separator = ""))
+    writer.close()
 }
+
+fun toTag(symbols: String, status: Boolean): String {
+    return when (symbols) {
+        "**" -> if (!status) "<b>" else "</b>"
+        "*" -> if (!status) "<i>" else "</i>"
+        "~~" -> if (!status) "<s>" else "</s>"
+        else -> ""
+    }
+}
+
 
 
 /**
