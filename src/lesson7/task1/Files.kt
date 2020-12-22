@@ -75,7 +75,20 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val result = mutableMapOf<String, Int>()
+    val listOfSubstrings = substrings.toSet().toList()
+    val text = File(inputName).readText().toLowerCase()
+    for (i in listOfSubstrings.indices) {
+        if (!result.contains(listOfSubstrings[i]))
+            result[listOfSubstrings[i]] = 0
+        for (j in text.indices)
+            if (text.startsWith(listOfSubstrings[i].toLowerCase(), j))
+                result[listOfSubstrings[i]] = result[listOfSubstrings[i]]!! + 1
+    }
+    return result
+}
+
 
 
 /**
@@ -311,70 +324,7 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
-fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val list = mutableMapOf(
-        "**" to false,
-        "*" to false,
-        "~~" to false
-    )
-    val resultList = mutableListOf<String>()
-    val writer = File(outputName).bufferedWriter()
-    resultList.add("<html>")
-    resultList.add("<body>")
-    resultList.add("<p>")
-    var pTrigger = true
-    for ((lineNumber, line) in File(inputName).readLines().withIndex()) {
-        if (line.isEmpty() && lineNumber != File(inputName).readLines().lastIndex && resultList.last() != "<p>") {
-            if (File(inputName).readLines()[lineNumber + 1].isEmpty()) continue
-            if (pTrigger) {
-                resultList.add("</p>")
-                pTrigger = false
-            }
-            if (!pTrigger) {
-                resultList.add("<p>")
-                pTrigger = true
-            }
-        }
-        var i = 0
-        while (i <= line.lastIndex) {
-            var symbol = line[i].toString()
-            if (i != line.lastIndex) {
-                if (list.contains(symbol + line[i + 1].toString())) {
-                    symbol = line[i].toString() + line[i + 1].toString()
-                    i += 2
-                    val status = list.getValue(symbol)
-                    resultList.add(toTag(symbol, status))
-                    list[symbol] = !status
-                    continue
-                }
-            }
-            if (list.contains(symbol)) {
-                symbol = line[i].toString()
-                i++
-            } else {
-                resultList.add(symbol)
-                i++
-                continue
-            }
-            val status = list.getValue(symbol)
-            resultList.add(toTag(symbol, status))
-            list[symbol] = !status
-        }
-    }
-    resultList.add("</p></body></html>")
-    writer.write(resultList.joinToString(separator = ""))
-    writer.close()
-}
-
-fun toTag(symbols: String, status: Boolean): String {
-    return when (symbols) {
-        "**" -> if (!status) "<b>" else "</b>"
-        "*" -> if (!status) "<i>" else "</i>"
-        "~~" -> if (!status) "<s>" else "</s>"
-        else -> ""
-    }
-}
-
+fun markdownToHtmlSimple(inputName: String, outputName: String): Nothing = TODO()
 
 
 /**
